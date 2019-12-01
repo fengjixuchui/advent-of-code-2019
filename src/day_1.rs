@@ -3,49 +3,45 @@ use std::collections::HashMap;
 use utility::stopwatch::stopwatch::*;
 use utility::utility::*;
 
-fn part_2() {
-    let input = load_file("resources/day_1_input.txt");
-    let stopwatch = Stopwatch::start_new();
-
-    let numbers = split_by_new_line_integer(input);
-    let mut previous_results: HashMap<i32, i32> = HashMap::new();
-    let mut result = 0;
-    previous_results.insert(result, 1);
-    'fullLoop: loop {
-        for number in &numbers {
-            result += *number;
-            let result_amount = match previous_results.get(&result) {
-                Some(amount) => {
-                    let new_amount = amount + 1;
-                    previous_results.insert(result, new_amount);
-                    new_amount
-                }
-                _ => {
-                    previous_results.insert(result, 1);
-                    1
-                }
-            };
-            if result_amount >= 2 {
-                break 'fullLoop;
-            }
-        }
-    }
-
-    stopwatch.print_elapsed();
-    println!("Result: {}", result);
-}
-
 fn part_1() {
     let input = load_file("resources/day_1_input.txt");
     let stopwatch = Stopwatch::start_new();
     let numbers = split_by_new_line_integer(input);
-    let mut result = 0;
+    let mut fuel: i64 = 0;
     for number in numbers {
-        result += number;
+        fuel += get_fuel(number);
     }
-    println!("Result: {}", result);
+    println!("Result: {}", fuel);
 
     stopwatch.print_elapsed();
+}
+
+fn part_2() {
+    let input = load_file("resources/day_1_input.txt");
+    let stopwatch = Stopwatch::start_new();
+    let numbers = split_by_new_line_integer(input);
+    let mut fuel: i64 = 0;
+    for number in numbers {
+        let mut next_fuel: i64 = number;
+        let mut single_fuel: i64 = 0;
+        while next_fuel > 0 {
+            next_fuel = get_fuel(next_fuel);
+            single_fuel += next_fuel;
+        }
+        fuel += single_fuel;
+    }
+    println!("Result: {}", fuel);
+
+    stopwatch.print_elapsed();
+}
+
+fn get_fuel(number: i64) -> i64 {
+    let fuel = (number as f64 / 3.0).floor() as i64 - 2;
+    if fuel > 0 {
+        fuel
+    } else {
+        0
+    }
 }
 
 fn main() {
