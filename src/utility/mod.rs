@@ -13,11 +13,18 @@ pub mod utility {
         };
     }
 
-    pub fn split_by(input: String) -> Vec<String> {
+    pub fn split_by(input: String, split: String) -> Vec<String> {
         input
-            .split(input.as_str())
-            .map(|string: &str| String::from(string))
+            .split(split.as_str())
+            .map(|string: &str| string.parse().unwrap())
             .collect::<Vec<String>>()
+    }
+
+    pub fn split_by_into_numbers(input: String, split: String) -> Vec<i64> {
+        input
+            .split(split.as_str())
+            .map(|string: &str| string.parse().unwrap())
+            .collect::<Vec<i64>>()
     }
 
     pub fn split_by_new_line(input: String) -> Vec<String> {
